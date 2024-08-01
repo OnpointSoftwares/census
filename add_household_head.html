@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Add Household Head</title>
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <header id="header" class="fixed-top">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+      <h1 class="logo me-auto me-lg-0"><a href="index.html">Census System</a></h1>
+      <nav id="navbar" class="navbar order-last order-lg-0">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="statistics.html">Statistics</a></li>
+          <li><a href="resources.html">Resources</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="data_collection.html">Add Data</a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+    </div>
+  </header><!-- End Header -->
+
+  <main id="main">
+    <!-- ======= Add Household Head Form Section ======= -->
+    <section id="add-household-head" class="add-household-head">
+      <div class="container" data-aos="fade-up">
+        <div class="section-title">
+          <h2>Add Household Head</h2>
+          <p>Enter the name of the new household head to add to the system.</p>
+        </div>
+
+        <form id="household-head-form" role="form" class="php-email-form">
+          <div class="form-group">
+            <label for="household_head_name">Household Head Name</label>
+            <input type="text" name="household_head_name" class="form-control" id="household_head_name" placeholder="Full Name" required>
+          </div>
+          
+          <div class="text-center">
+            <button type="submit" class="btn btn-primary">Add Household Head</button>
+          </div>
+        </form>
+
+        <div id="response-message" class="mt-3"></div>
+      </div>
+    </section><!-- End Add Household Head Form Section -->
+  </main><!-- End #main -->
+
+  <footer id="footer">
+    <div class="container">
+      <div class="copyright">
+        &copy; Copyright <strong><span>Census System</span></strong>. All Rights Reserved
+      </div>
+      <div class="credits">
+      </div>
+    </div>
+  </footer><!-- End Footer -->
+
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script>
+    document.getElementById('household-head-form').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent the default form submission
+      
+      const formData = new FormData(this);
+      
+      fetch('submit_household_head.php', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('response-message').innerHTML = `<div class="alert alert-success">${data}</div>`;
+        document.getElementById('household-head-form').reset(); // Optionally reset the form
+      })
+      .catch(error => {
+        document.getElementById('response-message').innerHTML = `<div class="alert alert-danger">An error occurred: ${error.message}</div>`;
+      });
+    });
+  </script>
+</body>
+
+</html>
