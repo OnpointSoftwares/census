@@ -17,15 +17,38 @@ class CensusSystem {
     }
 
     // Method to register a new user
-    public function registerUser($name, $email, $password, $role) {
-        $passwordHashed = password_hash($password, PASSWORD_BCRYPT);
-        $stmt = $this->conn->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)");
-        if ($stmt) {
-            $stmt->bind_param("ssss", $name, $email, $passwordHashed, $role);
+    public function registerUser($name, $email, $password, $role, $contact_method, $national_id_path) {
+        $this->conn->begin_transaction();
+        try {
+            // Get the role ID
+            $stmt = $this->conn->prepare("SELECT id FROM roles WHERE role_name = ?");
+            $stmt->bind_param("s", $role);
+            $stmt->execute();
+            $stmt->bind_result($role_id);
+            $stmt->fetch();
+            $stmt->close();
+
+            // Insert into users table
+            $passwordHashed = password_hash($password, PASSWORD_BCRYPT);
+            $stmt = $this->conn->prepare("INSERT INTO users (name, email, password, role_id) VALUES (?, ?, ?, ?)");
+            $stmt->bind_param("sssi", $name, $email, $passwordHashed, $role_id);
+            $stmt->execute();
+            $user_id = $stmt->insert_id; // Get the inserted user ID
+            $stmt->close();
+
+            // Insert into user_profiles table
+            $stmt = $this->conn->prepare("INSERT INTO user_profiles (user_id, contact_method, national_id_path) VALUES (?, ?, ?)");
+            $stmt->bind_param("iss", $user_id, $contact_method, $national_id_path);
             $stmt->execute();
             $stmt->close();
-        } else {
-            error_log("Error preparing statement: " . $this->conn->error);
+
+            // Commit transaction
+            $this->conn->commit();
+        } catch (Exception $e) {
+            // Rollback transaction if there is an error
+            $this->conn->rollback();
+            error_log("Error registering user: " . $e->getMessage());
+            throw new Exception("An error occurred during registration. Please try again.");
         }
     }
 
@@ -52,85 +75,5 @@ class CensusSystem {
             return false;
         }
     }
-
-    // Method to get a list of all users
-    public function getAllUsers() {
-        $result = $this->conn->query("SELECT id, name, email, role, created_at FROM users");
-        if ($result) {
-            $users = [];
-            while ($row = $result->fetch_assoc()) {
-                $users[] = $row;
-            }
-            return $users;
-        } else {
-            error_log("Error executing query: " . $this->conn->error);
-            return [];
-        }
-    }
-
-    // Method to get a user by ID
-    public function getUserById($userId) {
-        $stmt = $this->conn->prepare("SELECT id, name, email, role, created_at FROM users WHERE id = ?");
-        if ($stmt) {
-            $stmt->bind_param("i", $userId);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $user = $result->fetch_assoc();
-            $stmt->close();
-            return $user;
-        } else {
-            error_log("Error preparing statement: " . $this->conn->error);
-            return null;
-        }
-    }
-
-    // Method to update user details
-    public function updateUser($userId, $name, $email, $role) {
-        $stmt = $this->conn->prepare("UPDATE users SET name = ?, email = ?, role = ? WHERE id = ?");
-        if ($stmt) {
-            $stmt->bind_param("sssi", $name, $email, $role, $userId);
-            $stmt->execute();
-            $stmt->close();
-        } else {
-            error_log("Error preparing statement: " . $this->conn->error);
-        }
-    }
-
-    // Method to delete a user
-    public function deleteUser($userId) {
-        $stmt = $this->conn->prepare("DELETE FROM users WHERE id = ?");
-        if ($stmt) {
-            $stmt->bind_param("i", $userId);
-            $stmt->execute();
-            $stmt->close();
-        } else {
-            error_log("Error preparing statement: " . $this->conn->error);
-        }
-    }
 }
-
-$census = new CensusSystem("localhost", "root", "", "census_system");
-$census->registerUser("Alice Smith", "alice@example.com", "password123", "DataCollector");
-
-// Login a user
-if ($census->loginUser("alice@example.com", "password123")) {
-    echo "Login successful";
-} else {
-    echo "Login failed";
-}
-
-// Get all users
-$users = $census->getAllUsers();
-print_r($users);
-
-// Get a single user by ID
-$user = $census->getUserById(1);
-print_r($user);
-
-// Update a user
-$census->updateUser(1, "Alice Johnson", "alice.johnson@example.com", "Admin");
-
-// Delete a user
-$census->deleteUser(1);
-
 ?>
