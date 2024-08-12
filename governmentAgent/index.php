@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Analyst Dashboard</title>
+    <title>Government Agent Dashboard</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome for Icons -->
@@ -63,7 +63,7 @@
     <!-- Sidebar -->
     <div class="d-flex">
         <div class="sidebar p-3">
-            <h4 class="text-center">Data Analyst</h4>
+            <h4 class="text-center">Government Agent</h4>
             <hr class="bg-secondary">
             <a href="#dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
             <a href="#visualizations"><i class="fas fa-chart-bar"></i> Visualizations</a>
@@ -74,7 +74,7 @@
 
         <!-- Main Content -->
         <div class="content">
-            <h2 class="mb-4">Data Analyst Dashboard</h2>
+            <h2 class="mb-4">Government Agent Dashboard</h2>
 
             <!-- Dashboard Overview -->
             <div id="dashboard" class="card mb-4">

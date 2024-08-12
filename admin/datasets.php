@@ -152,7 +152,7 @@
                             <td>${dataset.description}</td>
                             <td>${dataset.created_at}</td>
                             <td>
-                                <a href="export_dataset.php?id=${dataset.id}" class="btn btn-sm btn-primary">Export</a>
+                                <a href="export_dataset.php?id=${dataset.name}" class="btn btn-sm btn-primary">Export</a>
                             </td>
                         </tr>`;
                         datasetsTable.insertAdjacentHTML('beforeend', row);

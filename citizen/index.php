@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Analyst Dashboard</title>
+    <title>Citizen Dashboard</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome for Icons -->
@@ -63,18 +63,17 @@
     <!-- Sidebar -->
     <div class="d-flex">
         <div class="sidebar p-3">
-            <h4 class="text-center">Data Analyst</h4>
+            <h4 class="text-center">citizen</h4>
             <hr class="bg-secondary">
             <a href="#dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
             <a href="#visualizations"><i class="fas fa-chart-bar"></i> Visualizations</a>
-            <a href="#datasets"><i class="fas fa-database"></i> Datasets</a>
-            <a href="#analysis"><i class="fas fa-search"></i> Advanced Analysis</a>
+    
             <a href="#logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
 
         <!-- Main Content -->
         <div class="content">
-            <h2 class="mb-4">Data Analyst Dashboard</h2>
+            <h2 class="mb-4">Citizen</h2>
 
             <!-- Dashboard Overview -->
             <div id="dashboard" class="card mb-4">
@@ -101,15 +100,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-4">
-            <div class="card text-white bg-warning">
-              <div class="card-body">
-                <h5 class="card-title">Regions Covered</h5>
-                <p class="card-text"><i class="fas fa-map-marked-alt"></i> <span id="total_regions">Loading...</span></p>
-              </div>
-            </div>
-          </div>
-        </div>
+         
       </section>
             </div>
 
@@ -146,40 +137,10 @@
             </div>
 
             <!-- Dataset Management -->
-            <div id="datasets" class="card mb-4">
-                <div class="card-header bg-success text-white">
-                    Datasets
-                </div>
-                <div class="card-body">
-                    <table class="table table-striped">
-                    <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Created At</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="datasetsTable">
-                            <!-- Data will be inserted here -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+           
 
             <!-- Advanced Analysis -->
-            <div id="analysis" class="card">
-                <div class="card-header bg-warning text-white">
-                    Advanced Analysis
-                </div>
-                <div class="card-body">
-                    <p>Use the following tools to perform in-depth statistical analysis.</p>
-                    <button class="btn btn-warning">Run Analysis</button>
-                </div>
-            </div>
-        </div>
-    </div>
+           
 
     <!-- Bootstrap and JavaScript Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"></script>

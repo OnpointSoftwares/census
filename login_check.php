@@ -14,21 +14,57 @@ $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
 // Validate login credentials
 if ($census->loginUser($email, $password)) {
     // Set session variable for user role
-    $_SESSION['user_role'] = $census->getUserRole($email); // Ensure this function exists and returns user role
-
+   // Ensure this function exists and returns user role
     // Redirect based on user role
     switch ($_SESSION['user_role']) {
-        case 'Admin':
-            header("Location: admin_dashboard.php");
+        case '1':
+            ?>
+            <script>
+            location.replace("admin");
+            </script>
+            <?php
             break;
-        case 'DataCollector':
-            header("Location: data_collector_dashboard.php");
+        case '2':
+            ?>
+            <script>
+            location.replace("censusEnumerator.php");
+            </script>
+            <?php
             break;
-        case 'Viewer':
-            header("Location: viewer_dashboard.php");
+        case '3':
+            ?>
+            <script>
+            location.replace("dataAnalyst");
+            </script>
+            <?php
             break;
+        case '4':
+                ?>
+                <script>
+                location.replace("researcher");
+                </script>
+                <?php
+                break;
+        case '5':
+                ?>
+                <script>
+                location.replace("citizen");
+                </script>
+                <?php
+                break;
+        case '6':
+                ?>
+                <script>
+                location.replace("governmentAgent");
+                </script>
+                <?php
+                break;
         default:
-            header("Location: default_dashboard.php");
+        ?>
+<script>
+        location.replace("login.php?error=1");
+            </script>
+        <?php
             break;
     }
     exit();

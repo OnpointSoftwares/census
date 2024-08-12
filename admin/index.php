@@ -86,6 +86,79 @@
           </div>
         </div>
       </section>
+<!-- Task Assignment Section -->
+<section id="tasks" class="mt-5">
+    <h2 class="mb-4">Assign Tasks to Enumerators</h2>
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            Task Assignment
+        </div>
+        <div class="card-body">
+            <form id="assignTaskForm">
+                <div class="mb-3">
+                    <label for="enumerator" class="form-label">Select Enumerator</label>
+                    <select id="enumerator" class="form-select">
+                        <!-- Enumerator options will be loaded here -->
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="task_description" class="form-label">Task Description</label>
+                    <textarea id="task_description" class="form-control" rows="4"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Assign Task</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        fetchEnumerators();
+
+        document.getElementById('assignTaskForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            assignTask();
+        });
+    });
+
+    function fetchEnumerators() {
+        fetch('fetch_enumerators.php')
+            .then(response => response.json())
+            .then(data => {
+                const enumeratorSelect = document.getElementById('enumerator');
+                data.forEach(enumerator => {
+                    const option = document.createElement('option');
+                    option.value = enumerator.id;
+                    option.textContent = enumerator.name;
+                    enumeratorSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching enumerators:', error));
+    }
+
+    function assignTask() {
+        const enumerator_id = document.getElementById('enumerator').value;
+        const task_description = document.getElementById('task_description').value;
+
+        fetch('assign_task.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ enumerator_id, task_description })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Task assigned successfully');
+                document.getElementById('assignTaskForm').reset();
+            } else {
+                alert('Error assigning task');
+            }
+        })
+        .catch(error => console.error('Error assigning task:', error));
+    }
+</script>
 
       <!-- Statistics Section -->
       <section id="statistics" class="mt-5">

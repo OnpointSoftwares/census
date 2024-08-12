@@ -54,7 +54,7 @@ class CensusSystem {
 
     // Method to login a user
     public function loginUser($email, $password) {
-        $stmt = $this->conn->prepare("SELECT id, name, password, role FROM users WHERE email = ?");
+        $stmt = $this->conn->prepare("SELECT id, name, password, role_id FROM users WHERE email = ?");
         if ($stmt) {
             $stmt->bind_param("s", $email);
             $stmt->execute();
