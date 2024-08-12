@@ -144,7 +144,32 @@
         </div>
       </section>
 
-      <!-- Datasets Section -->
+  <!-- Users Section -->
+<section id="users" class="mt-5">
+    <h2 class="mb-4">Users</h2>
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            User Management
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTable">
+                    <!-- User data will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
       <section id="datasets" class="mt-5">
         <h2 class="mb-4">Datasets</h2>
         <div class="card">
@@ -200,6 +225,7 @@
       fetchOverviewData();
       fetchStatisticsData();
       fetchDemographicsData();
+      fetchUsersData()
     });
 
     function fetchOverviewData() {
@@ -255,6 +281,56 @@
         .catch(error => console.error('Error fetching statistics data:', error));
     }
 
+    function fetchUsersData() {
+    fetch('fetch_users.php')
+        .then(response => response.json())
+        .then(data => {
+            const usersTable = document.getElementById('usersTable');
+            data.forEach(user => {
+                const row = `<tr>
+                    <td>${user.id}</td>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${user.role_id}</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning" onclick="editUser(${user.id})">Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteUser(${user.id})">Delete</button>
+                    </td>
+                </tr>`;
+                usersTable.insertAdjacentHTML('beforeend', row);
+            });
+        })
+        .catch(error => console.error('Error fetching users data:', error));
+}
+
+// Implement editUser and deleteUser functions
+function editUser(userId) {
+    // Logic to edit user (fetch user data, populate a form, etc.)
+    alert('Edit user with ID: ' + userId);
+}
+
+function deleteUser(userId) {
+    // Logic to delete user (confirm deletion, send delete request to server, etc.)
+    if (confirm('Are you sure you want to delete this user?')) {
+        fetch('delete_user.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id: userId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('User deleted successfully');
+                location.reload();
+            } else {
+                alert('Error deleting user');
+            }
+        })
+        .catch(error => console.error('Error deleting user:', error));
+    }
+}
     function fetchDemographicsData() {
       fetch('fetch_demographics.php')
         .then(response => response.json())
